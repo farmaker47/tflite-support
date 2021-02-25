@@ -37,13 +37,21 @@ http_archive(
     ],
 )
 
-# TF on 2021-02-24
+# TF on 2021-02-02.
+# The following variables are needed when set up libedgetpu.
+TENSORFLOW_COMMIT = "b1de80b78f1a9523e4bcdd6f906c8ebdf227d3fe"
+TENSORFLOW_SHA256 = "2fcbd8a1928cce6b9fb338983391a35e2f4a4dab218ffdfdd5ebcf47b623988f"
+# These values come from tensorflow/workspace3.bzl. If the TF commit is updated,
+# these should be updated to match.
+IO_BAZEL_RULES_CLOSURE_COMMIT = "308b05b2419edb5c8ee0471b67a40403df940149"
+IO_BAZEL_RULES_CLOSURE_SHA256 = "5b00383d08dd71f28503736db0500b6fb4dda47489ff5fc6bed42557c07c6ba9"
 http_archive(
     name = "org_tensorflow",
-    sha256 = "2fcbd8a1928cce6b9fb338983391a35e2f4a4dab218ffdfdd5ebcf47b623988f",
-    strip_prefix = "tensorflow-b1de80b78f1a9523e4bcdd6f906c8ebdf227d3fe",
+    sha256 = TENSORFLOW_SHA256,
+    strip_prefix = "tensorflow-" + TENSORFLOW_COMMIT,
     urls = [
-        "https://github.com/tensorflow/tensorflow/archive/b1de80b78f1a9523e4bcdd6f906c8ebdf227d3fe.tar.gz",
+        "https://github.com/tensorflow/tensorflow/archive/" + TENSORFLOW_COMMIT
+        + ".tar.gz",
     ],
     patches = [
         # We need to rename lite/ios/BUILD.apple to lite/ios/BUILD.
@@ -244,6 +252,21 @@ http_archive(
         "https://github.com/s-yata/darts-clone/archive/e40ce4627526985a7767444b6ed6893ab6ff8983.zip",
     ],
 )
+
+http_archive(
+    name = "libedgetpu",
+    sha256 = "f27bc39ddf7b6a603385b68fd56957ce8b9260d093f2161fa214b9236dd65550",
+    strip_prefix = "libedgetpu-release-frogfish",
+    urls = [
+        "https://github.com/google-coral/libedgetpu/archive/release-frogfish.zip",
+    ],
+)
+
+# Set up TensorFlow version for Coral.
+load("@libedgetpu//:workspace.bzl", "libedgetpu_dependencies")
+libedgetpu_dependencies(TENSORFLOW_COMMIT, TENSORFLOW_SHA256,
+                        IO_BAZEL_RULES_CLOSURE_COMMIT,
+                        IO_BAZEL_RULES_CLOSURE_SHA256)
 
 # AutoValue 1.6+ shades Guava, Auto Common, and JavaPoet. That's OK
 # because none of these jars become runtime dependencies.

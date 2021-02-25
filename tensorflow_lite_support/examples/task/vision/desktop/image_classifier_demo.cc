@@ -26,6 +26,7 @@ limitations under the License.
 #include "absl/flags/parse.h"
 #include "absl/status/status.h"
 #include "absl/strings/str_format.h"
+#include "tensorflow_lite_support/cc/port/configuration_proto_inc.h"
 #include "tensorflow_lite_support/cc/port/statusor.h"
 #include "tensorflow_lite_support/cc/task/core/external_file_handler.h"
 #include "tensorflow_lite_support/cc/task/core/proto/external_file_proto_inc.h"
@@ -79,6 +80,7 @@ ImageClassifierOptions BuildOptions() {
        absl::GetFlag(FLAGS_class_name_blacklist)) {
     options.add_class_name_blacklist(class_name);
   }
+  ::tflite::proto::Delegate::EDGETPU_CORAL);
   return options;
 }
 

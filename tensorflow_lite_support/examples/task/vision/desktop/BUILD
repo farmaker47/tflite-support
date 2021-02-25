@@ -9,6 +9,8 @@ cc_binary(
     name = "image_classifier_demo",
     srcs = ["image_classifier_demo.cc"],
     deps = [
+        "//tensorflow_lite_support/acceleration/configuration:edgetpu_coral_plugin",
+        "//tensorflow_lite_support/cc/port:configuration_proto_inc",
         "//tensorflow_lite_support/cc/port:statusor",
         "//tensorflow_lite_support/cc/task/core:external_file_handler",
         "//tensorflow_lite_support/cc/task/core/proto:external_file_proto_inc",
